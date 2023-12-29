@@ -6,6 +6,12 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Repository;
 
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
+import static java.time.Duration.ofDays;
+import static java.util.concurrent.TimeUnit.DAYS;
+
 @Slf4j
 @Repository
 @RequiredArgsConstructor
@@ -17,6 +23,7 @@ public class RefreshTokenRepository {
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         valueOperations.set(String.valueOf(memberId), refreshToken);
         log.info("=======레디스에 저장========");
+        valueOperations.getAndExpire(String.valueOf(memberId), 30, DAYS);
     }
 
     public String findByMemberId(Long memberId) {
