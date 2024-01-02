@@ -23,7 +23,7 @@ public class MemberController {
         Long memberId = memberService.save(request);
         String accessToken = jwtService.generateAccessToken(memberId);
         String refreshToken = jwtService.generateRefreshToken(memberId);
-        refreshTokenRepository.saveRefreshToken(memberId, refreshToken);
+        refreshTokenRepository.saveRefreshToken(accessToken, refreshToken);
         return new TokenResponse(accessToken, refreshToken);
     }
 

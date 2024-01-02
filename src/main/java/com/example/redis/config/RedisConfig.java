@@ -1,5 +1,6 @@
 package com.example.redis.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -9,12 +10,15 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 @Configuration
 public class RedisConfig {
 
-    private static final String REDIS_HOST = "localhost";
-    private static final int REDIS_PORT = 6379;
+    @Value("${spring.redis.host}")
+    private String redisHost;
+
+    @Value("${spring.redis.port}")
+    private int redisPort;
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory(REDIS_HOST, REDIS_PORT);
+        return new LettuceConnectionFactory(redisHost, redisPort);
     }
 
     @Bean

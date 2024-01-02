@@ -6,10 +6,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Repository;
 
-import java.time.Duration;
-import java.util.concurrent.TimeUnit;
-
-import static java.time.Duration.ofDays;
 import static java.util.concurrent.TimeUnit.DAYS;
 
 @Slf4j
@@ -19,16 +15,18 @@ public class RefreshTokenRepository {
 
     private final RedisTemplate redisTemplate;
 
-    public void saveRefreshToken(Long memberId, String refreshToken) {
+    public void saveRefreshToken(String accessToken, String refreshToken) {
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-        valueOperations.set(String.valueOf(memberId), refreshToken);
+        //key = accessToekn value = refreshToken
+        valueOperations.set(accessToken, refreshToken);
         log.info("=======레디스에 저장========");
-        valueOperations.getAndExpire(String.valueOf(memberId), 30, DAYS);
+        //유효기간 만료 1년
+        valueOperations.getAndExpire(accessToken, 365, DAYS);
     }
 
-    public String findByMemberId(Long memberId) {
+    public String findByAccessToken(String accessToken) {
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-        String refreshToken = valueOperations.get(String.valueOf(memberId));
+        String refreshToken = valueOperations.get(accessToken);
         log.info("refreshToken = {} ", refreshToken);
         if (refreshToken.equals("") || refreshToken == null) {
             throw new IllegalArgumentException("존재하지 않는 토큰입니다.");
