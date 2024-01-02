@@ -11,13 +11,13 @@ import static java.util.concurrent.TimeUnit.DAYS;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class RefreshTokenRepository {
+public class TokenRepository {
 
     private final RedisTemplate redisTemplate;
 
     public void saveRefreshToken(String accessToken, String refreshToken) {
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-        //key = accessToekn value = refreshToken
+        //key = accessToken value = refreshToken
         valueOperations.set(accessToken, refreshToken);
         log.info("=======레디스에 저장========");
         //유효기간 만료 1년

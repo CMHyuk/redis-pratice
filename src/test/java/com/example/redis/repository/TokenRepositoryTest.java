@@ -7,7 +7,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class RefreshTokenRepositoryTest {
+class TokenRepositoryTest {
 
     @Test
     void test() {
